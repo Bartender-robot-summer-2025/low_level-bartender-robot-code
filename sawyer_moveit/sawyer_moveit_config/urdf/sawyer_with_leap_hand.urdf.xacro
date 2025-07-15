@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="sawyer">
+
+  <!-- Include the official Sawyer robot -->
+  <xacro:include filename="$(find sawyer_description)/urdf/sawyer.urdf.xacro"/>
+  <!-- Include your leap hand -->
+  <xacro:include filename="$(find sawyer_moveit_config)/leap_hand/robot.urdf"/>
+
+  <!-- Custom end effector link - positioned closer to the palm -->
+  <link name="custom_end_effector">
+    <!-- This is just a virtual link for planning, no visual/collision geometry needed -->
+  </link>
+
+  <!-- Joint connecting custom end effector to right_hand -->
+  <joint name="custom_end_effector_joint" type="fixed">
+    <parent link="right_hand"/>
+    <child link="custom_end_effector"/>
+    <!-- Modify these values to shift the end effector point -->
+    <!-- xyz: x=forward/backward, y=left/right, z=up/down -->
+    <!-- rpy: roll, pitch, yaw rotations -->
+    <origin xyz="-0.02 0.06 0.11" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Attach the hand to the Sawyer wrist -->
+  <joint name="leap_hand_mount" type="fixed">
+    <parent link="right_hand"/>
+    <child link="palm_lower"/>
+    <origin xyz="-0.04 -0.01 0.11" rpy="1.5708 -1.5708 0"/>
+  </joint>
+
+</robot> 

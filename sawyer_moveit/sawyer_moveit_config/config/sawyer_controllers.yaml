@@ -1,0 +1,16 @@
+controller_list:
+  - name: /robot/limb/right
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    dcoefault: true
+    goal_tolerance: 0.2
+    path_tolerance: 0.2
+    goal_time_tolerance: 1.0
+    joints:
+      - right_j0
+      - right_j1
+      - right_j2
+      - right_j3
+      - right_j4
+      - right_j5
+      - right_j6

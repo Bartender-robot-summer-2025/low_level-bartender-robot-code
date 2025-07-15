@@ -1,0 +1,192 @@
+<?xml version="1.0" ?>
+<robot name="sawyer" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--SRDF Xacro Args-->
+  <xacro:arg name="tip_name" default="right_hand"/>
+  <xacro:arg name="electric_gripper" default="false"/>
+  <xacro:arg name="controller_box" default="true"/>
+
+  <!--Base Sawyer Collisions-->
+  <xacro:include filename="$(find sawyer_moveit_config)/srdf/sawyer_base.srdf.xacro" />
+  <xacro:sawyer_base tip_name="$(arg tip_name)"/>
+
+  <!--Controller Box Collisions-->
+  <xacro:if value="$(arg controller_box)">
+    <xacro:include filename="$(find sawyer_moveit_config)/srdf/controller_box.srdf.xacro" />
+    <xacro:controller_box/>
+  </xacro:if>
+
+  <!--Right End Effector Collisions-->
+  <xacro:if value="$(arg electric_gripper)">
+    <xacro:include filename="$(find sawyer_moveit_config)/srdf/rethink_electric_gripper.srdf.xacro" />
+    <xacro:rethink_electric_gripper side="right"/>
+  </xacro:if>
+
+  <!-- Brute-force disable all self-collisions for leap hand links -->
+  <disable_collisions link1="palm_lower" link2="mcp_joint" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="pip" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="dip" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="fingertip" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="mcp_joint_2" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="pip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="palm_lower" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="mcp_joint" link2="pip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="dip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="fingertip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="mcp_joint_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="pip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="pip" link2="dip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="fingertip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="mcp_joint_2" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="pip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="dip" link2="fingertip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="mcp_joint_2" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="pip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="fingertip" link2="mcp_joint_2" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="pip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="mcp_joint_2" link2="pip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_2" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="pip_2" link2="dip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_2" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="dip_2" link2="fingertip_2" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_2" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="fingertip_2" link2="mcp_joint_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_2" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="mcp_joint_3" link2="pip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_3" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_3" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_3" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_3" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_3" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="mcp_joint_3" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="pip_3" link2="dip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_3" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_3" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_3" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_3" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_3" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="dip_3" link2="fingertip_3" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_3" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_3" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_3" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="dip_3" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="fingertip_3" link2="pip_4" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_3" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_3" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="fingertip_3" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="pip_4" link2="thumb_pip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_4" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="pip_4" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="thumb_pip" link2="thumb_dip" reason="Hand brute-force"/>
+  <disable_collisions link1="thumb_pip" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <disable_collisions link1="thumb_dip" link2="thumb_fingertip" reason="Hand brute-force"/>
+
+  <!-- Disable collision between hand base and Sawyer wrist -->
+  <disable_collisions link1="right_hand" link2="palm_lower" reason="Hand mount"/>
+
+  <!-- Disable self-collisions for palm and thumb -->
+  <disable_collisions link1="palm_lower" link2="pip_4" reason="Adjacent"/>
+  <disable_collisions link1="palm_lower" link2="thumb_pip" reason="Adjacent"/>
+  <disable_collisions link1="palm_lower" link2="thumb_dip" reason="Adjacent"/>
+  <disable_collisions link1="palm_lower" link2="thumb_fingertip" reason="Adjacent"/>
+  <disable_collisions link1="pip_4" link2="thumb_pip" reason="Adjacent"/>
+  <disable_collisions link1="thumb_pip" link2="thumb_dip" reason="Adjacent"/>
+  <disable_collisions link1="thumb_dip" link2="thumb_fingertip" reason="Adjacent"/>
+
+  <!-- Disable collision between thumb base and Sawyer wrist -->
+  <disable_collisions link1="right_hand" link2="pip_4" reason="Hand-arm brute-force"/>
+</robot>

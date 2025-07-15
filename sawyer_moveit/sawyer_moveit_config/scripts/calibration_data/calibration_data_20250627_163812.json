@@ -1,0 +1,9 @@
+{
+  "calibration_data": [],
+  "metadata": {
+    "total_points": 0,
+    "collection_date": "2025-06-27T16:38:12.032967",
+    "robot_frame": "base",
+    "camera_frame": "camera_optical_frame"
+  }
+}

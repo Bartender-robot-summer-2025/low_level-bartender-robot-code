@@ -1,0 +1,92 @@
+[
+  {
+    "robot_bottle_x": 0.4,
+    "robot_bottle_y": -0.3,
+    "camera_x": 422.0,
+    "camera_y": 41.0
+  },
+  {
+    "robot_bottle_x": 0.4,
+    "robot_bottle_y": 0.0,
+    "camera_x": 444.0,
+    "camera_y": 242.0
+  },
+  {
+    "robot_bottle_x": 0.4,
+    "robot_bottle_y": 0.3,
+    "camera_x": 464.0,
+    "camera_y": 422.0
+  },
+  {
+    "robot_bottle_x": 0.5,
+    "robot_bottle_y": -0.3,
+    "camera_x": 394.0,
+    "camera_y": 10.0
+  },
+  {
+    "robot_bottle_x": 0.5,
+    "robot_bottle_y": 0.0,
+    "camera_x": 368.0,
+    "camera_y": 244.0
+  },
+  {
+    "robot_bottle_x": 0.5,
+    "robot_bottle_y": 0.3,
+    "camera_x": 384.0,
+    "camera_y": 404.0
+  },
+  {
+    "robot_bottle_x": 0.6,
+    "robot_bottle_y": -0.3,
+    "camera_x": 320.0,
+    "camera_y": 33.0
+  },
+  {
+    "robot_bottle_x": 0.6,
+    "robot_bottle_y": 0.0,
+    "camera_x": 330.0,
+    "camera_y": 205.0
+  },
+  {
+    "robot_bottle_x": 0.6,
+    "robot_bottle_y": 0.3,
+    "camera_x": 327.0,
+    "camera_y": 408.0
+  },
+  {
+    "robot_bottle_x": 0.7,
+    "robot_bottle_y": -0.3,
+    "camera_x": 259.0,
+    "camera_y": 35.0
+  },
+  {
+    "robot_bottle_x": 0.7,
+    "robot_bottle_y": 0.0,
+    "camera_x": 266.0,
+    "camera_y": 215.0
+  },
+  {
+    "robot_bottle_x": 0.7,
+    "robot_bottle_y": 0.3,
+    "camera_x": 265.0,
+    "camera_y": 414.0
+  },
+  {
+    "robot_bottle_x": 0.8,
+    "robot_bottle_y": -0.3,
+    "camera_x": 158.0,
+    "camera_y": 62.0
+  },
+  {
+    "robot_bottle_x": 0.8,
+    "robot_bottle_y": 0.0,
+    "camera_x": 160.0,
+    "camera_y": 238.0
+  },
+  {
+    "robot_bottle_x": 0.8,
+    "robot_bottle_y": 0.3,
+    "camera_x": 166.0,
+    "camera_y": 426.0
+  }
+]
