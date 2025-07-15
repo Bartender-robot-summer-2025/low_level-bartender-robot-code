@@ -1,5 +1,39 @@
 # ROS Workspace - Bartender Robot Project
 
+## Quick Start: Running the Sawyer Arm with MoveIt and LEAP Hand
+
+Follow these steps to bring up the Sawyer arm, MoveIt, LEAP hand, and bartender robot scripts:
+
+1. **(Optional) Reference Tutorial:**
+   - [Intera MoveIt Tutorial (archived)](https://web.archive.org/web/20230128035522/https://sdk.rethinkrobotics.com/intera/MoveIt_Tutorial)
+
+2. **Enable the Sawyer Robot:**
+   ```bash
+   rosrun intera_interface enable_robot.py -e
+   ```
+
+3. **Start the Joint Trajectory Action Server:**
+   ```bash
+   rosrun intera_interface joint_trajectory_action_server.py
+   ```
+
+4. **Launch MoveIt for Sawyer:**
+   ```bash
+   roslaunch sawyer_moveit_config sawyer_moveit.launch
+   ```
+
+5. **Start the LEAP Hand Node:**
+   ```bash
+   roslaunch example.launch
+   ```
+
+6. **Run the Bartender Robot Script:**
+   ```bash
+   python3 scripts/bartender_move.py --bottle_x 0.4 --bottle_y -0.3 --bottle_z -0.05 --hand_action close
+   ```
+
+---
+
 This ROS workspace contains packages for the bartender robot project, including Sawyer robot control, LEAP hand integration, and sensor processing.
 
 ## Workspace Structure
