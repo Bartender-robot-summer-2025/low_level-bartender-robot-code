@@ -316,7 +316,7 @@ def main():
                 if args.hand_action == 'open':
                     subprocess.run([
                         'python3', '/home/atrc234/ros_ws/src/ros_module/move_sim_hand.py', 
-                        'waypoint_open',  '--waypoint_delay', '0.05'
+                        'waypoint_open_grab',  '--waypoint_delay', '0.05'
                     ], env=env)
                     print("Hand opened after final approach (via move_sim_hand.py subprocess call).")
                 else:  # close

@@ -192,7 +192,7 @@ def check_grabbed_from_udp(port=12345, timeout=2.0, num_checks=4, check_temp_aft
 
                     rate = (temp2 - temp1) / wait_time
                     print(f"Rate of change: {rate:.2f} deg/sec")
-                    if -20 < rate < 0:
+                    if -20 < rate < -.1:
                         print("Robot has grabbed something cold")
                     else:
                         print("Temperature change does not indicate a cold object.")
@@ -213,7 +213,7 @@ def check_grabbed_from_udp(port=12345, timeout=2.0, num_checks=4, check_temp_aft
 
 def main():
     parser = argparse.ArgumentParser(description="Send open, close, or waypoint_close command to LEAP hand, or toggle interactively if no argument.")
-    parser.add_argument('command', nargs='?', choices=['open', 'close', 'waypoint_close', 'waypoint_open'], help="Command: 'open', 'close', 'waypoint_close', or 'waypoint_open'. If omitted, toggles interactively.")
+    parser.add_argument('command', nargs='?', choices=['open', 'close', 'waypoint_close', 'waypoint_open', 'waypoint_open_grab'], help="Command: 'open', 'close', 'waypoint_close', or 'waypoint_open'. If omitted, toggles interactively.")
     parser.add_argument('--num_waypoints', type=int, default=15, help="Number of waypoints for waypoint_close/waypoint_open (default: 20)")
     parser.add_argument('--waypoint_delay', type=float, default=0.05, help="Delay (seconds) between waypoints (default: 0.05)")
     args = parser.parse_args()
@@ -228,6 +228,47 @@ def main():
     closed_positions = [min(val, mx) for val, mx in zip(base_closed, LEAPsim_max)] + [1.59, 0.262, 0.287, 1.07]  # Thumb unchanged
 
     if args.command == 'open':
+        print("Waiting for significant change in Sensor 2 Shear 1 before opening hand...")
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.settimeout(15)
+        sock.bind(("127.0.0.1", 12345))
+        initial_shear = None
+        try:
+            # Get initial shear value
+            while initial_shear is None:
+                data, _ = sock.recvfrom(4096)
+                text = data.decode()
+        
+                sensor2_match = re.search(r"Sensor 2:(.*?)(Sensor 1:|$)", text, re.DOTALL)
+                if sensor2_match:
+                    sensor2_block = sensor2_match.group(1)
+                    print("Sensor 2 block:", repr(sensor2_block))
+                    shear_match = re.search(r"Shear 1:\s*([\d.\-]+)", sensor2_block)
+                    if shear_match:
+                        initial_shear = float(shear_match.group(1))
+                        print(f"Initial Sensor 2 Shear 1: {initial_shear}")
+            # Wait for significant change
+            while True:
+                data, _ = sock.recvfrom(4096)
+                text = data.decode()
+               
+                sensor2_match = re.search(r"Sensor 2:(.*?)(Sensor 1:|$)", text, re.DOTALL)
+                if sensor2_match:
+                    sensor2_block = sensor2_match.group(1)
+                   
+                    shear_match = re.search(r"Shear 1:\s*([\d.\-]+)", sensor2_block)
+                    if shear_match:
+                        current_shear = float(shear_match.group(1))
+                        print(f"Next Sensor 2 Shear 1: {current_shear}")
+                        delta = current_shear - initial_shear
+                        print(f"Current Sensor 2 Shear 1: {current_shear}, Delta: {delta}")
+                        if abs(delta) > 1.5:
+                            print("Significant shear force change detected. Opening hand.")
+                            break
+        except socket.timeout:
+            print("Timeout while waiting for shear force change. Proceeding to open hand anyway.")
+        finally:
+            sock.close()
         send_leap_hand_positions(open_positions, pub)
         print("Hand opened.")
         return
@@ -259,6 +300,52 @@ def main():
             time.sleep(args.waypoint_delay)
         print("Hand opened with waypoints.")
         return
+    elif args.command == 'waypoint_open_grab':
+        print("Waiting for significant change in Sensor 2 Shear 1 before opening hand (waypoint_open_grab)...")
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.settimeout(10.0)
+        sock.bind(("127.0.0.1", 12345))
+        initial_shear = None
+        try:
+            # Get initial shear value
+            while initial_shear is None:
+                data, _ = sock.recvfrom(4096)
+                text = data.decode()
+                sensor2_match = re.search(r"Sensor 2:(.*?)(Sensor 1:|$)", text, re.DOTALL)
+                if sensor2_match:
+                    sensor2_block = sensor2_match.group(1)
+                    shear_match = re.search(r"Shear 1:\s*([\d.\-]+)", sensor2_block)
+                    if shear_match:
+                        initial_shear = float(shear_match.group(1))
+                        print(f"Initial Sensor 2 Shear 1: {initial_shear}")
+            # Wait for significant change
+            while True:
+                data, _ = sock.recvfrom(4096)
+                text = data.decode()
+                sensor2_match = re.search(r"Sensor 2:(.*?)(Sensor 1:|$)", text, re.DOTALL)
+                if sensor2_match:
+                    sensor2_block = sensor2_match.group(1)
+                    shear_match = re.search(r"Shear 1:\s*([\d.\-]+)", sensor2_block)
+                    if shear_match:
+                        current_shear = float(shear_match.group(1))
+                        print(f"Next Sensor 2 Shear 1: {current_shear}")
+                        delta = current_shear - initial_shear
+                        print(f"Current Sensor 2 Shear 1: {current_shear}, Delta: {delta}")
+                        if abs(delta) > 1.5:
+                            print("Significant shear force change detected. Opening hand.")
+                            break
+        except socket.timeout:
+            print("Timeout while waiting for shear force change. Proceeding to open hand anyway.")
+        finally:
+            sock.close()
+        waypoints = generate_waypoints_with_thumb_priority(closed_positions, open_positions, args.num_waypoints)
+        print(f"Moving hand to open position using {args.num_waypoints} waypoints...")
+        for i, pos in enumerate(waypoints):
+            send_leap_hand_positions(pos, pub)
+            print(f"  Sent waypoint {i+1}/{len(waypoints)}")
+            time.sleep(args.waypoint_delay)
+        print("Hand opened with waypoints.")
+        return
 
     # Interactive mode if no argument is given
     is_closed = False
@@ -269,6 +356,46 @@ def main():
             print("Exiting.")
             break
         if is_closed:
+            print("Waiting for significant change in Sensor 2 Shear 1 before opening hand...")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.settimeout(10.0)
+            sock.bind(("127.0.0.1", 12345))
+            initial_shear = None
+            try:
+                # Get initial shear value
+                while initial_shear is None:
+                    data, _ = sock.recvfrom(4096)
+                    text = data.decode()
+                    sensor2_match = re.search(r"Sensor 2:(.*?)(Sensor 1:|$)", text, re.DOTALL)
+                    if sensor2_match:
+                        sensor2_block = sensor2_match.group(1)
+                        
+                        shear_match = re.search(r"Shear 1:\s*([\d.\-]+)", sensor2_block)
+                        if shear_match:
+                            initial_shear = float(shear_match.group(1))
+                            print(f"Initial Sensor 2 Shear 1: {initial_shear}")
+                # Wait for significant change
+                while True:
+                    data, _ = sock.recvfrom(4096)
+                    text = data.decode()
+                    
+                    sensor2_match = re.search(r"Sensor 2:(.*?)(Sensor 1:|$)", text, re.DOTALL)
+                    if sensor2_match:
+                        sensor2_block = sensor2_match.group(1)
+                       
+                        shear_match = re.search(r"Shear 1:\s*([\d.\-]+)", sensor2_block)
+                        if shear_match:
+                            current_shear = float(shear_match.group(1))
+                            print(f"Next Sensor 2 Shear 1: {current_shear}")
+                            delta = current_shear - initial_shear
+                            print(f"Current Sensor 2 Shear 1: {current_shear}, Delta: {delta}")
+                            if abs(delta) > 1.5:
+                                print("Significant shear force change detected. Opening hand.")
+                                break
+            except socket.timeout:
+                print("Timeout while waiting for shear force change. Proceeding to open hand anyway.")
+            finally:
+                sock.close()
             waypoints = generate_waypoints_with_thumb_priority(closed_positions, open_positions, args.num_waypoints)
             print(f"Moving hand to open position using {args.num_waypoints} waypoints...")
             for i, pos in enumerate(waypoints):
